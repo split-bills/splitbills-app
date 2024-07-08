@@ -18,7 +18,7 @@ import { Plus } from "lucide-react"
 
 export default function EventsTable() {
   return (
-    <Card className="w-1/2">
+    <Card className="w-[40rem]">
       <CardHeader className="px-7 flex flex-row justify-between items-start">
         <div>
             <CardTitle>Events</CardTitle>
