@@ -17,7 +17,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" style={{ userSelect: 'none' }}>
       <body className={inter.className}>
         <Navbar />
         <Separator orientation="horizontal" />
