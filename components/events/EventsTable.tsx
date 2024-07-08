@@ -14,7 +14,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { Plus } from "lucide-react"
+import {
+  ArrowRight,
+  MoveRight,
+} from "lucide-react"
 
 export default function EventsTable() {
   return (
@@ -25,8 +28,9 @@ export default function EventsTable() {
             <CardDescription>A list of events you&apos;ve attended.</CardDescription>
         </div>
         <Button className="mt-5">
-            <Plus size={16} className="mr-1.5" />
             New Event
+            <MoveRight size={16} className="ml-1.5" />
+            {/* <ArrowRight size={16} className="ml-1.5" /> */}
         </Button>
       </CardHeader>
       <CardContent>

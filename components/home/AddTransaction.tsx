@@ -19,6 +19,10 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { 
   Plus,
+  Film,
+  ShoppingBag,
+  Utensils,
+  Bus,
 } from "lucide-react"
 
 interface AddTransactionProps {
@@ -61,11 +65,35 @@ const AddTransaction: React.FC<AddTransactionProps> = ({ title }) => {
                     <SelectValue placeholder="Reason" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="movie">Movie</SelectItem>
-                    <SelectItem value="shopping">Shopping</SelectItem>
-                    <SelectItem value="food">Food</SelectItem>
-                    <SelectItem value="travel">Travel</SelectItem>
-                    <SelectItem value="others">Others</SelectItem>
+                    <SelectItem value="movie">
+                      <div className="flex items-start gap-3">
+                        <Film className="size-5" />
+                        <p>Movie</p>
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="shopping">
+                      <div className="flex items-start gap-3">
+                        <ShoppingBag className="size-5" />
+                        <p>Shopping</p>
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="food">
+                      <div className="flex items-start gap-3">
+                        <Utensils className="size-5" />
+                        <p>Food</p>
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="travel">
+                      <div className="flex items-start gap-3">
+                        <Bus className="size-5" />
+                        <p>Travel</p>
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="others">
+                      <div className="flex items-start gap-3">
+                        <p>Others</p>
+                      </div>
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
