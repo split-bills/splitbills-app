@@ -44,55 +44,59 @@ const NewEvent = () => {
         <CardHeader>
           <CardTitle>Add Event</CardTitle>
         </CardHeader>
-        <CardContent className="grid grid-cols-2 gap-4">
-          <Input placeholder="Event Name" />
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant={"outline"}
-                className={cn(
-                  "w-[280px] justify-start text-left font-normal",
-                  !date && "text-muted-foreground"
-                )}
-              >
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                {date ? format(date, "PPP") : <span>Pick a date</span>}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0">
-              <Calendar
-                mode="single"
-                selected={date}
-                onSelect={setDate}
-                initialFocus
-              />
-            </PopoverContent>
-          </Popover>
-
-          {participants.map((participant, index) => (
-            <div key={index} className="flex items-center gap-2 mt-2">
-              <Input 
-                placeholder={`Participant ${index + 1}`} 
-                // value={participant}
-                onChange={(e) => handleParticipantChange(e.target.value, index)}
-              />
-              {participants.length > 1 && (
-                <Button 
-                  variant="destructive" 
-                  size="sm" 
-                  onClick={() => removeParticipant(index)}
+        <CardContent className="">
+          <div className="grid grid-cols-2 gap-4">
+            <Input placeholder="Event Name" />
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant={"outline"}
+                  className={cn(
+                    "w-[280px] justify-start text-left font-normal",
+                    !date && "text-muted-foreground"
+                  )}
                 >
-                  Remove
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {date ? format(date, "PPP") : <span>Pick a date</span>}
                 </Button>
-              )}
-            </div>
-          ))}
-          <Button className="mt-2" size="sm" variant="outline" onClick={addParticipant}>
-            Add Participant
-          </Button>
-          <Button className="mt-2" size="sm">
-            Save
-          </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0">
+                <Calendar
+                  mode="single"
+                  selected={date}
+                  onSelect={setDate}
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
+
+            {participants.map((participant, index) => (
+              <div key={index} className="flex items-center gap-2 mt-2">
+                <Input 
+                  placeholder={`Participant ${index + 1}`} 
+                  value={participant}
+                  onChange={(e) => handleParticipantChange(e.target.value, index)}
+                />
+                {participants.length > 1 && (
+                  <Button 
+                    variant="destructive" 
+                    size="sm" 
+                    onClick={() => removeParticipant(index)}
+                  >
+                    Remove
+                  </Button>
+                )}
+              </div>
+            ))}
+          </div>
+          <div className="grid gap-1">
+            <Button className="mt-2" size="sm" variant="outline" onClick={addParticipant}>
+              Add Participant
+            </Button>
+            <Button className="mt-2" size="sm">
+              Next
+            </Button>
+          </div>
         </CardContent>
       </Card>
     </div>

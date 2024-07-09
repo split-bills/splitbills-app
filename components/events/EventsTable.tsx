@@ -18,19 +18,24 @@ import {
   ArrowRight,
   MoveRight,
 } from "lucide-react"
+import { format } from "date-fns"
 
-export default function EventsTable() {
+interface EventsTableProps {
+  toggleNewEvent: () => void
+  showNewEvent: boolean
+}
+
+const EventsTable: React.FC<EventsTableProps> = ({ toggleNewEvent, showNewEvent }) => {
   return (
-    <Card className="w-[40rem]">
+    <Card className="w-[40rem] h-fit">
       <CardHeader className="px-7 flex flex-row justify-between items-start">
         <div>
             <CardTitle>Events</CardTitle>
             <CardDescription>A list of events you&apos;ve attended.</CardDescription>
         </div>
-        <Button className="mt-5">
-            New Event
-            <MoveRight size={16} className="ml-1.5" />
-            {/* <ArrowRight size={16} className="ml-1.5" /> */}
+        <Button className="mt-5" onClick={toggleNewEvent}>
+          {showNewEvent ? 'Cancel' : 'New Event'}
+          <MoveRight size={16} className="ml-1.5" />
         </Button>
       </CardHeader>
       <CardContent>
@@ -46,7 +51,7 @@ export default function EventsTable() {
             <TableRow>
               <TableCell>Haikyuu Movie</TableCell>
               <TableCell className="text-center">7</TableCell>
-              <TableCell className="text-center">10-10-2023</TableCell>
+              <TableCell className="text-center">{format("10-11-2023", "PPP")}</TableCell>
             </TableRow>
           </TableBody>
         </Table>
@@ -54,3 +59,5 @@ export default function EventsTable() {
     </Card>
   )
 }
+
+export default EventsTable
