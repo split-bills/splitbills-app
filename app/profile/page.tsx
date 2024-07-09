@@ -1,9 +1,9 @@
-import React from 'react'
+import ProfileCard from "@/components/profile/ProfileCard"
 
 const page = () => {
   return (
     <div className="p-4">
-      Profile      
+      <ProfileCard />    
     </div>
   )
 }
