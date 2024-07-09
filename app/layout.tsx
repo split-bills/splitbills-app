@@ -21,7 +21,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <Navbar />
         <Separator orientation="horizontal" />
-        <main className="flex flex-col items-center bg-muted/40 min-h-screen w-screen">
+        <main className="flex flex-col items-center bg-muted/40 h-screen">
           {children}
         </main>
       </body>
