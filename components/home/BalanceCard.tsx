@@ -11,7 +11,7 @@ import AddTransaction from "./AddTransaction"
 
 const BalanceCard = () => {
   return (
-    <Card>
+    <Card className="h-fit">
         <CardHeader className="ml-4 mb-0">
             <CardTitle className="text-2xl font-light">Total Balance</CardTitle>
             <p className="text-4xl font-medium">₹0</p>

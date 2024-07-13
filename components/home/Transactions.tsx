@@ -1,11 +1,13 @@
-import { Badge } from "@/components/ui/badge"
+import TransactionDialog from "./TransactionDialog";
+
+import { Badge } from "@/components/ui/badge";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -13,7 +15,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 
 export default function Transactions() {
   return (
@@ -28,7 +30,9 @@ export default function Transactions() {
             <TableRow>
               <TableHead>User</TableHead>
               <TableHead className="text-center">Amount</TableHead>
-              <TableHead className="hidden sm:table-cell text-center">Type</TableHead>
+              <TableHead className="hidden sm:table-cell text-center">
+                Type
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -62,9 +66,12 @@ export default function Transactions() {
                 </Badge>
               </TableCell>
             </TableRow>
+            <TableRow>
+              <TransactionDialog />
+            </TableRow>
           </TableBody>
         </Table>
       </CardContent>
     </Card>
-  )
+  );
 }
