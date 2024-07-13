@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { format } from "date-fns";
@@ -16,16 +17,23 @@ import {
 } from "@/components/ui/popover";
 
 const NewEvent = () => {
-  const [date, setDate] = useState<Date>();
-  const [participants, setParticipants] = useState<string[]>([""]);
-  const [step, setStep] = useState<number>(1); // Added state to track the current step
+  const [date, setDate] = useState<Date | null>(null);
+  const [participants, setParticipants] = useState<string[]>(["", ""]);
+  const [eventName, setEventName] = useState<string>("");
+  const [step, setStep] = useState<number>(1);
+  const [expenses, setExpenses] = useState<number[]>([]);
+  const [paidAmounts, setPaidAmounts] = useState<number[]>([]);
 
   const addParticipant = () => {
     setParticipants([...participants, ""]);
+    setExpenses([...expenses, 0]);
+    setPaidAmounts([...paidAmounts, 0]);
   };
 
   const removeParticipant = (index: number) => {
     setParticipants(participants.filter((_, i) => i !== index));
+    setExpenses(expenses.filter((_, i) => i !== index));
+    setPaidAmounts(paidAmounts.filter((_, i) => i !== index));
   };
 
   const handleParticipantChange = (value: string, index: number) => {
@@ -34,8 +42,28 @@ const NewEvent = () => {
     setParticipants(newParticipants);
   };
 
+  const handleExpenseChange = (value: string, index: number) => {
+    const newExpenses = [...expenses];
+    newExpenses[index] = Number(value);
+    setExpenses(newExpenses);
+  };
+
+  const handlePaidChange = (value: string, index: number) => {
+    const newPaidAmounts = [...paidAmounts];
+    newPaidAmounts[index] = Number(value);
+    setPaidAmounts(newPaidAmounts);
+  };
+
   const handleNextStep = () => {
-    setStep(step + 1);
+    if (eventName && date && participants.every((participant) => participant)) {
+      setStep(step + 1);
+    } else {
+      alert("Please fill all fields before proceeding to the next step.");
+    }
+  };
+
+  const handleBackStep = () => {
+    setStep(step - 1);
   };
 
   return (
@@ -47,7 +75,12 @@ const NewEvent = () => {
           </CardHeader>
           <CardContent className="">
             <div className="grid grid-cols-2 gap-4">
-              <Input placeholder="Event Name" />
+              <Input
+                placeholder="Event Name"
+                value={eventName}
+                onChange={(e) => setEventName(e.target.value)}
+                required
+              />
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
@@ -79,8 +112,9 @@ const NewEvent = () => {
                     onChange={(e) =>
                       handleParticipantChange(e.target.value, index)
                     }
+                    required
                   />
-                  {participants.length > 1 && (
+                  {participants.length > 2 && (
                     <Button
                       variant="destructive"
                       size="sm"
@@ -92,7 +126,7 @@ const NewEvent = () => {
                 </div>
               ))}
             </div>
-            <div className="grid gap-1">
+            <div className="grid grid-cols-2 gap-2 mt-2 items-center">
               <Button
                 className="mt-2"
                 size="sm"
@@ -114,11 +148,42 @@ const NewEvent = () => {
             <CardTitle>Event Details</CardTitle>
           </CardHeader>
           <CardContent className="">
-            <div className="grid grid-cols-2 gap-4">
-              <Input placeholder="Event Location" />
-              <Input placeholder="Event Description" />
+            <div className="">
+              <div className="grid grid-cols-3 gap-4 mb-3">
+                <Label className="text-center"></Label>
+                <Label className="text-center text-lg">Expenses</Label>
+                <Label className="text-center text-lg">Paid</Label>
+              </div>
+              {participants.map((participant, index) => (
+                <div
+                  key={index}
+                  className="grid grid-cols-3 gap-4 my-2 items-center"
+                >
+                  <Label className="text-center">{participant}</Label>
+                  <Input
+                    type="number"
+                    value={expenses[index] || ""}
+                    onChange={(e) => handleExpenseChange(e.target.value, index)}
+                    required
+                  />
+                  <Input
+                    type="number"
+                    value={paidAmounts[index] || ""}
+                    onChange={(e) => handlePaidChange(e.target.value, index)}
+                    required
+                  />
+                </div>
+              ))}
             </div>
-            <div className="grid gap-1">
+            <div className="grid grid-cols-2 gap-2 mt-2 items-center">
+              <Button
+                className="mt-2"
+                size="sm"
+                variant="outline"
+                onClick={handleBackStep}
+              >
+                Back
+              </Button>
               <Button className="mt-2" size="sm">
                 Submit
               </Button>
