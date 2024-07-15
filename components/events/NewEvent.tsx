@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/popover";
 
 const NewEvent = () => {
-  const [date, setDate] = useState<Date | null>(null);
+  const [date, setDate] = useState<Date>();
   const [participants, setParticipants] = useState<string[]>(["", ""]);
   const [eventName, setEventName] = useState<string>("");
   const [step, setStep] = useState<number>(1);
