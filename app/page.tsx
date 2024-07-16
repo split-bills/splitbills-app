@@ -31,7 +31,7 @@ export default function Home() {
         <span className="">Hello</span>, {firstName ? firstName + '!' : ''}
       </p>
       <div className="flex flex-row gap-20">
-        <BalanceCard />
+        <BalanceCard email='jane.smith@example.com'/>
         <Transactions />
       </div>
     </div>
