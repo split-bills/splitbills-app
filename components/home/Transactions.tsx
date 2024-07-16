@@ -1,3 +1,6 @@
+import axios from "axios";
+import { useState, useEffect } from "react";
+
 import TransactionDialog from "./TransactionDialog";
 
 import { Badge } from "@/components/ui/badge";
@@ -17,9 +20,41 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
+interface Transaction {
+  amount: number;
+  reason: string;
+  created_at: Date;
+  first_name: string;
+  last_name: string;
+  email: string;
+}
+
+interface Transactions {
+  name: string;
+  balance: number;
+  email: string;
+  incoming_transactions: Transaction[];
+  outgoing_transactions: Transaction[];
+}
+
 export default function Transactions() {
+  const [transactions, setTransactions] = useState([]);
+
+  useEffect(() => {
+    console.log("Fetching user transactions");
+    axios
+      .get("http://localhost:8080/transactions/jane.smith@example.com")
+      .then((response) => {
+        console.log("Response:", response.data);
+        setTransactions(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
   return (
-    <Card className="w-[32rem]">
+    <Card className="w-[32rem] h-fit">
       <CardHeader className="px-7">
         <CardTitle>Transactions</CardTitle>
         <CardDescription>Your current payments and debts.</CardDescription>
@@ -36,39 +71,14 @@ export default function Transactions() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow>
-              <TableCell>
-                <div className="font-medium">Liam Johnson</div>
-                <div className="hidden text-sm text-muted-foreground md:inline">
-                  liam@example.com
-                </div>
-              </TableCell>
-              <TableCell className="text-center">₹250.00</TableCell>
-              <TableCell className="hidden sm:table-cell text-center">
-                <Badge className="text-xs" variant="secondary">
-                  <span className="flex h-1.5 w-1.5 rounded-full bg-green-600 mr-1.5"></span>
-                  Receive
-                </Badge>
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>
-                <div className="font-medium">Liam Johnson</div>
-                <div className="hidden text-sm text-muted-foreground md:inline">
-                  liam@example.com
-                </div>
-              </TableCell>
-              <TableCell className="text-center">₹500.00</TableCell>
-              <TableCell className="hidden sm:table-cell text-center">
-                <Badge className="text-xs" variant="outline">
-                  <span className="flex h-1.5 w-1.5 rounded-full bg-[#ED2B2A] mr-1.5"></span>
-                  Owe
-                </Badge>
-              </TableCell>
-            </TableRow>
-            <TableRow>
+            {transactions.map((transactions: Transactions) => (
+              <TableRow key={transactions.name}>
+                <TransactionDialog transactions={transactions} />
+              </TableRow>
+            ))}
+            {/* <TableRow>
               <TransactionDialog />
-            </TableRow>
+            </TableRow> */}
           </TableBody>
         </Table>
       </CardContent>
