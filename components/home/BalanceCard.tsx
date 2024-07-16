@@ -47,7 +47,7 @@ const BalanceCard: React.FC<BalanceCardProps> = ({ email }) => {
     <Card className="h-fit">
       <CardHeader className="ml-4 mb-0">
         <CardTitle className="text-2xl font-light">Total Balance</CardTitle>
-        <p className="text-4xl font-medium">
+        <p className="text-3xl font-medium">
           {totalBalance < 0
             ? `-₹${Math.abs(totalBalance)}`
             : `₹${totalBalance}`}
@@ -58,14 +58,14 @@ const BalanceCard: React.FC<BalanceCardProps> = ({ email }) => {
           <p className="text-xl font-medium">
             <span className="text-green-600 text-lg">&#x25B4;</span> Incoming
           </p>
-          <p className="text-2xl">+₹{balance.incoming}</p>
+          <p className="text-xl">+₹{balance.incoming}</p>
           <AddTransaction email={email} title="Incoming" />
         </div>
         <div className="m-5 ml-0">
           <p className="text-xl font-medium">
             <span className="text-[#ED2B2A] text-sm">&#x25BC;</span> Outgoing
           </p>
-          <p className="text-2xl">-₹{balance.outgoing}</p>
+          <p className="text-xl">-₹{balance.outgoing}</p>
           <AddTransaction email={email} title="Outgoing" />
         </div>
       </CardContent>
