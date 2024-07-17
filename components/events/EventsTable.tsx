@@ -1,11 +1,15 @@
-import { Button } from "@/components/ui/button"
+"use client";
+
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -13,28 +17,55 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import {
-  ArrowRight,
-  MoveRight,
-} from "lucide-react"
-import { format } from "date-fns"
+} from "@/components/ui/table";
+import { ArrowRight, MoveRight } from "lucide-react";
+import { format } from "date-fns";
 
 interface EventsTableProps {
-  toggleNewEvent: () => void
-  showNewEvent: boolean
+  toggleNewEvent: () => void;
+  showNewEvent: boolean;
 }
 
-const EventsTable: React.FC<EventsTableProps> = ({ toggleNewEvent, showNewEvent }) => {
+interface Event {
+  name: string;
+  date: Date;
+}
+
+const EventsTable: React.FC<EventsTableProps> = ({
+  toggleNewEvent,
+  showNewEvent,
+}) => {
+  const [events, setEvents] = useState<Event[]>([]);
+  useEffect(() => {
+    console.log("fetching events data...");
+    try {
+      axios
+        .get("http://localhost:8080/events/all", {
+          params: {
+            email: "jane.smith@example.com",
+          },
+        })
+        .then((response) => {
+          console.log("Events data: ", response.data);
+          setEvents(response.data.events);
+        });
+    } catch (error) {
+      console.error("Error fetching events data: ", error);
+    } finally {
+      console.log("Events data fetched successfully!");
+    }
+  }, []);
   return (
     <Card className="w-[40rem] h-fit">
       <CardHeader className="px-7 flex flex-row justify-between items-start">
         <div>
-            <CardTitle>Events</CardTitle>
-            <CardDescription>A list of events you&apos;ve attended.</CardDescription>
+          <CardTitle>Events</CardTitle>
+          <CardDescription>
+            A list of events you&apos;ve attended.
+          </CardDescription>
         </div>
         <Button className="mt-5" onClick={toggleNewEvent}>
-          {showNewEvent ? 'Cancel' : 'New Event'}
+          {showNewEvent ? "Cancel" : "New Event"}
           <MoveRight size={16} className="ml-1.5" />
         </Button>
       </CardHeader>
@@ -48,16 +79,20 @@ const EventsTable: React.FC<EventsTableProps> = ({ toggleNewEvent, showNewEvent 
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow>
-              <TableCell>Haikyuu Movie</TableCell>
-              <TableCell className="text-center">7</TableCell>
-              <TableCell className="text-center">{format("10-11-2023", "PPP")}</TableCell>
-            </TableRow>
+            {events.map((event, index) => (
+              <TableRow key={index}>
+                <TableCell>{event.name}</TableCell>
+                <TableCell className="text-center">7</TableCell>
+                <TableCell className="text-center">
+                  {format(event.date, "PPP")}
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </CardContent>
     </Card>
-  )
-}
+  );
+};
 
-export default EventsTable
+export default EventsTable;
