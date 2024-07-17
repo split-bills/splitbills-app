@@ -64,7 +64,7 @@ const TransactionDialog: React.FC<TransactionDialogProps> = ({
         </DialogTrigger>
 
         <TableCell className="text-center">
-          ₹{Math.abs(transactions.balance)}
+          ₹{Math.abs(transactions.balance).toFixed(2)}
         </TableCell>
 
         <TableCell className="hidden sm:table-cell text-center">
@@ -112,8 +112,8 @@ const TransactionDialog: React.FC<TransactionDialogProps> = ({
                       {transaction.reason}
                     </div>
                   </TableCell>
-                  <TableCell className="text-center">
-                    ₹{Math.abs(transaction.amount)}
+                  <TableCell className="text-right">
+                    ₹{Math.abs(transaction.amount).toFixed(2)}
                   </TableCell>
                   <TableCell className="hidden sm:table-cell text-center">
                     {transaction.amount < 0 ? (

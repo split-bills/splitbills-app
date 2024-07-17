@@ -48,9 +48,7 @@ const BalanceCard: React.FC<BalanceCardProps> = ({ email }) => {
       <CardHeader className="ml-4 mb-0">
         <CardTitle className="text-2xl font-light">Total Balance</CardTitle>
         <p className="text-3xl font-medium">
-          {totalBalance < 0
-            ? `-₹${Math.abs(totalBalance)}`
-            : `₹${totalBalance}`}
+          {totalBalance < 0 && "-"}₹{Math.abs(totalBalance).toFixed(2)}
         </p>
       </CardHeader>
       <CardContent className="flex flex-row gap-5">
