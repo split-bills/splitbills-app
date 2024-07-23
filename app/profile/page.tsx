@@ -1,11 +1,11 @@
-import ProfileCard from "@/components/profile/ProfileCard"
+import ProfileCard from "@/components/profile/ProfileCard";
 
 const page = () => {
   return (
     <div className="p-4">
-      <ProfileCard />    
+      <ProfileCard />
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default page;
