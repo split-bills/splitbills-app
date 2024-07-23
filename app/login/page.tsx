@@ -36,7 +36,7 @@ export default function LoginForm() {
     console.log("Submitting login details :", loginDetails);
     try {
       const response = await axios.post(
-        "http://localhost:8080/login",
+        "http://localhost:8080/auth/login",
         loginDetails,
         { withCredentials: true }
       );

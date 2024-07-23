@@ -56,7 +56,7 @@ export default function LoginForm() {
     }
     try {
       const response = await axios.post(
-        "http://localhost:8080/signup",
+        "http://localhost:8080/auth/signup",
         signUpDetails
       );
       console.log("Signed up successfully:", response.data);
