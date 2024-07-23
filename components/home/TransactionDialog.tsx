@@ -152,14 +152,39 @@ const TransactionDialog: React.FC<TransactionDialogProps> = ({
                       )}
                     </TableCell>
                     <TableCell>
-                      <DialogClose>
-                        <Button
-                          size="sm"
-                          onClick={() => UpdateCleared(transaction.id)}
-                        >
-                          Cleared
-                        </Button>
-                      </DialogClose>
+                      <Dialog>
+                        <DialogTrigger>
+                          <Button size="sm">Cleared</Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                          <DialogHeader>
+                            <DialogTitle>Are you absolutely sure?</DialogTitle>
+                            <DialogDescription>
+                              This action cannot be undone. This will
+                              permanently make this payment cleared.
+                            </DialogDescription>
+                          </DialogHeader>
+                          <div className="flex flex-row justify-center gap-4">
+                            <DialogClose>
+                              <Button
+                                size="sm"
+                                className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md"
+                                onClick={() => UpdateCleared(transaction.id)}
+                              >
+                                Yes
+                              </Button>
+                            </DialogClose>
+                            <DialogClose>
+                              <Button
+                                size="sm"
+                                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md"
+                              >
+                                No
+                              </Button>
+                            </DialogClose>
+                          </div>
+                        </DialogContent>
+                      </Dialog>
                     </TableCell>
                   </TableRow>
                 ))}
