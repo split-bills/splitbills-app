@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation"; // Use next/router instead of next/navigation
 import axios from "axios";
 import { Button } from "@/components/ui/button";
 import {
@@ -36,25 +37,33 @@ const EventsTable: React.FC<EventsTableProps> = ({
   showNewEvent,
 }) => {
   const [events, setEvents] = useState<Event[]>([]);
+  const router = useRouter();
+
   useEffect(() => {
     console.log("fetching events data...");
-    try {
-      axios
-        .get("http://localhost:8080/events/all", {
-          params: {
-            email: "jane.smith@example.com",
-          },
-        })
-        .then((response) => {
-          console.log("Events data: ", response.data);
-          setEvents(response.data.events);
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://localhost:8080/events/all", {
+          withCredentials: true,
         });
-    } catch (error) {
-      console.error("Error fetching events data: ", error);
-    } finally {
-      console.log("Events data fetched successfully!");
-    }
-  }, []);
+        console.log("Events data: ", response.data);
+        response.data.events.sort((a: Event, b: Event) =>
+          a.date < b.date ? 1 : -1
+        );
+        setEvents(response.data.events);
+      } catch (error: any) {
+        console.error("Error fetching events data: ", error);
+        if (error.response && error.response.status === 401) {
+          router.push("/login");
+        }
+      } finally {
+        console.log("Events data fetched successfully!");
+      }
+    };
+
+    fetchData();
+  }, [router]); // Empty dependency array ensures useEffect runs only once on mount
+
   return (
     <Card className="w-[40rem] h-fit">
       <CardHeader className="px-7 flex flex-row justify-between items-start">

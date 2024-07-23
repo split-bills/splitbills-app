@@ -13,16 +13,12 @@ import {
 } from "@/components/ui/card";
 import AddTransaction from "./AddTransaction";
 
-interface BalanceCardProps {
-  email: string;
-}
-
 interface balanceCardData {
   incoming: number;
   outgoing: number;
 }
 
-const BalanceCard: React.FC<BalanceCardProps> = ({ email }) => {
+const BalanceCard = () => {
   const [balance, setBalance] = useState<balanceCardData>({
     incoming: 0,
     outgoing: 0,
@@ -31,13 +27,18 @@ const BalanceCard: React.FC<BalanceCardProps> = ({ email }) => {
   useEffect(() => {
     console.log("Fetching balance data...");
     axios
-      .get("http://localhost:8080/balance/jane.smith@example.com")
+      .get("http://localhost:8080/home/balance", {
+        withCredentials: true,
+      })
       .then((res) => {
         setBalance(res.data);
         console.log("Balance fetched:", res.data);
       })
       .catch((err) => {
         console.error("Error fetching balance:", err);
+        if (err.response && err.response.status === 401) {
+          window.location.href = "/login";
+        }
       });
   }, []);
 
@@ -57,14 +58,14 @@ const BalanceCard: React.FC<BalanceCardProps> = ({ email }) => {
             <span className="text-green-600 text-lg">&#x25B4;</span> Incoming
           </p>
           <p className="text-xl">+₹{balance.incoming}</p>
-          <AddTransaction email={email} title="Incoming" />
+          <AddTransaction title="Incoming" />
         </div>
         <div className="m-5 ml-0">
           <p className="text-xl font-medium">
             <span className="text-[#ED2B2A] text-sm">&#x25BC;</span> Outgoing
           </p>
           <p className="text-xl">-₹{balance.outgoing}</p>
-          <AddTransaction email={email} title="Outgoing" />
+          <AddTransaction title="Outgoing" />
         </div>
       </CardContent>
     </Card>

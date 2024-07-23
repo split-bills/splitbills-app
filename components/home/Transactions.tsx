@@ -43,13 +43,18 @@ export default function Transactions() {
   useEffect(() => {
     console.log("Fetching user transactions");
     axios
-      .get("http://localhost:8080/transactions/jane.smith@example.com")
+      .get("http://localhost:8080/home/transactions", {
+        withCredentials: true,
+      })
       .then((response) => {
         console.log("Response:", response.data);
         setTransactions(response.data);
       })
       .catch((error) => {
         console.error(error);
+        if (error.response && error.response.status === 401) {
+          window.location.href = "/login";
+        }
       });
   }, []);
 

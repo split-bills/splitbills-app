@@ -1,7 +1,7 @@
 "use client";
 
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect, use } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -19,10 +19,7 @@ import {
 
 const NewEvent = () => {
   const [date, setDate] = useState<Date>();
-  const [participants, setParticipants] = useState<string[]>([
-    "jane.smith@example.com",
-    "",
-  ]);
+  const [participants, setParticipants] = useState<string[]>(["", ""]);
   const [eventName, setEventName] = useState<string>("");
   const [step, setStep] = useState<number>(1);
   const [expenses, setExpenses] = useState<number[]>([]);
@@ -69,12 +66,16 @@ const NewEvent = () => {
           params: {
             emails: participants,
           },
+          withCredentials: true,
         });
         console.log("Users Names : ", response.data.names);
         setParticipantsNames(response.data.names);
         setStep(step + 1);
       } catch (error) {
         console.error("Error fetching participants' names:", error);
+        alert(
+          "Error fetching participants' names. Please enter registered emails."
+        );
       }
     } else {
       alert("Please fill all fields before proceeding to the next step.");
@@ -85,6 +86,21 @@ const NewEvent = () => {
     setStep(step - 1);
   };
 
+  useEffect(() => {
+    console.log("Fetching user email...");
+    axios
+      .get("http://localhost:8080/events/email", { withCredentials: true })
+      .then((response) => {
+        setParticipants([response.data.email, ""]);
+      })
+      .catch((error) => {
+        console.error("Error fetching user email:", error);
+        if (error.response && error.response.status === 401) {
+          // window.location.href = "/login";
+        }
+      });
+  }, []);
+
   const submitEventDetails = async () => {
     if (
       expenses.every((expense) => expense > 0) &&
@@ -92,14 +108,18 @@ const NewEvent = () => {
     ) {
       try {
         console.log("Posting new event...");
-        const response = await axios.post("http://localhost:8080/events/new", {
-          name: eventName,
-          date: date,
-          owner: participants[0],
-          participants: participants,
-          expenses: expenses,
-          paidAmounts: paidAmounts,
-        });
+        const response = await axios.post(
+          "http://localhost:8080/events/new",
+          {
+            name: eventName,
+            date: date,
+            owner: participants[0],
+            participants: participants,
+            expenses: expenses,
+            paidAmounts: paidAmounts,
+          },
+          { withCredentials: true }
+        );
         console.log("Event created successfully:", response.data);
         alert("Event created successfully!");
       } catch (error) {
@@ -160,7 +180,7 @@ const NewEvent = () => {
                     required
                     {...(index === 0 && { readOnly: true })}
                   />
-                  {participants.length > 1 && index != 0 && (
+                  {participants.length > 2 && index != 0 && (
                     <Button
                       variant="destructive"
                       size="sm"
@@ -205,7 +225,9 @@ const NewEvent = () => {
                   key={index}
                   className="grid grid-cols-3 gap-4 my-2 items-center"
                 >
-                  <Label className="text-center">{participant}</Label>
+                  <Label className="text-start text-lg w-fit">
+                    {participant}
+                  </Label>
                   <Input
                     type="number"
                     value={expenses[index] || ""}

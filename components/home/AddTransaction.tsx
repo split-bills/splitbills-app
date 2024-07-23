@@ -22,12 +22,10 @@ import { Input } from "@/components/ui/input";
 import { Plus, Film, ShoppingBag, Utensils, Bus } from "lucide-react";
 
 interface AddTransactionProps {
-  email: string;
   title: string;
 }
 
 interface Transaction {
-  userEmail: string;
   friendEmail: string;
   amount: string;
   reason: string;
@@ -38,8 +36,11 @@ const postTransaction = async (transaction: Transaction) => {
   console.log("Transaction:", transaction);
   try {
     const response = await axios.post(
-      "http://localhost:8080/transaction",
-      transaction
+      "http://localhost:8080/home/transaction",
+      transaction,
+      {
+        withCredentials: true,
+      }
     );
 
     if (!response.data) {
@@ -54,9 +55,8 @@ const postTransaction = async (transaction: Transaction) => {
   }
 };
 
-const AddTransaction: React.FC<AddTransactionProps> = ({ title, email }) => {
+const AddTransaction: React.FC<AddTransactionProps> = ({ title }) => {
   const [formData, setFormData] = useState<Transaction>({
-    userEmail: email,
     friendEmail: "",
     amount: "",
     reason: "",

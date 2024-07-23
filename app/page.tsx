@@ -6,19 +6,27 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 
 export default function Home() {
-  const [firstName, setFirstName] = useState('');
+  const [firstName, setFirstName] = useState("");
 
   useEffect(() => {
-    axios.get(`http://localhost:8080/jane.smith@example.com`)
+    axios
+      .get(`http://localhost:8080/home/name`, {
+        withCredentials: true,
+      })
       .then((response) => {
         console.log("Response:", response.data);
         setFirstName(response.data.first_name);
-      }).catch((err) => {
+      })
+      .catch((err) => {
         console.error("Error fetching user data:", err);
-        let errorFirstName = 'Error fetching user data';
+        let errorFirstName = "Error fetching user data";
+
+        if (err.response && err.response.status === 401) {
+          window.location.href = "/login";
+        }
 
         if (err.response && err.response.status === 404) {
-          errorFirstName = 'User not found';
+          errorFirstName = "User not found";
         }
 
         setFirstName(errorFirstName);
@@ -28,10 +36,10 @@ export default function Home() {
   return (
     <div className="p-4">
       <p className="text-3xl font-bold tracking-normal mt-8 mb-4">
-        <span className="">Hello</span>, {firstName ? firstName + '!' : ''}
+        <span className="">Hello</span>, {firstName ? firstName + "!" : ""}
       </p>
       <div className="flex flex-row gap-20">
-        <BalanceCard email='jane.smith@example.com'/>
+        <BalanceCard />
         <Transactions />
       </div>
     </div>
