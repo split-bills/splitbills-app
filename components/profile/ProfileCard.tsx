@@ -64,6 +64,10 @@ const ProfileCard = () => {
   };
 
   const patchChanges = async () => {
+    if (!details.first_name || !details.last_name) {
+      alert("Please fill in all fields");
+      return;
+    }
     try {
       const response = await axios.patch(
         "http://localhost:8080/profile/details",
