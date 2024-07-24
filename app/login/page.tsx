@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import Link from "next/link";
@@ -17,11 +17,28 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 export default function LoginForm() {
+  const router = useRouter();
+
+  useEffect(() => {
+    console.log("Checking if authenticated");
+    axios
+      .get("http://localhost:8080/auth/check", {
+        withCredentials: true,
+      })
+      .then((response) => {
+        if (response.data.authenticated) {
+          console.log("Already authenticated!");
+          router.push("/");
+        } else {
+          console.log("Not authenticated");
+        }
+      });
+  }, [router]);
+
   const [loginDetails, setLoginDetails] = useState({
     email: "",
     password: "",
   });
-  const router = useRouter();
 
   const setEmail = (email: string) => {
     setLoginDetails({ ...loginDetails, email: email });
