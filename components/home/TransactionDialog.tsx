@@ -153,7 +153,7 @@ const TransactionDialog: React.FC<TransactionDialogProps> = ({
                     </TableCell>
                     <TableCell>
                       <Dialog>
-                        <DialogTrigger>
+                        <DialogTrigger asChild>
                           <Button size="sm">Cleared</Button>
                         </DialogTrigger>
                         <DialogContent>
