@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import Link from "next/link";
@@ -18,6 +19,7 @@ import { Label } from "@/components/ui/label";
 
 export default function LoginForm() {
   const router = useRouter();
+  const toast = useToast();
 
   useEffect(() => {
     console.log("Checking if authenticated");
@@ -61,11 +63,17 @@ export default function LoginForm() {
       if (response.data.authenticated) {
         router.push("/");
       } else {
-        alert("Invalid login credentials");
+        toast.toast({
+          title: "Invalid login credentials",
+          description: "Please check your email and password.",
+        });
       }
     } catch (error) {
       console.error(error);
-      alert("Error logging in");
+      toast.toast({
+        title: "Error logging in",
+        description: "Please try again.",
+      });
     }
   };
 

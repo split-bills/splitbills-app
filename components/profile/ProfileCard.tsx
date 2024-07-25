@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useToast } from "@/components/ui/use-toast";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
 import {
@@ -30,6 +31,8 @@ interface ProfileDetails {
 }
 
 const ProfileCard = () => {
+  const toast = useToast();
+
   const [details, setDetails] = useState<ProfileDetails>({
     first_name: "",
     last_name: "",
@@ -65,7 +68,10 @@ const ProfileCard = () => {
 
   const patchChanges = async () => {
     if (!details.first_name || !details.last_name) {
-      alert("Please fill in all fields");
+      toast.toast({
+        title: "Please fill in all fields",
+        description: "First name and Last name are required",
+      });
       return;
     }
     try {

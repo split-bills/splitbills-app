@@ -1,6 +1,8 @@
 "use client";
 
 import axios from "axios";
+// import { toast } from "sonner";
+import { useToast } from "@/components/ui/use-toast";
 import { useState, useEffect, use } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -18,6 +20,8 @@ import {
 } from "@/components/ui/popover";
 
 const NewEvent = () => {
+  const toast = useToast();
+
   const [date, setDate] = useState<Date>();
   const [participants, setParticipants] = useState<string[]>(["", ""]);
   const [eventName, setEventName] = useState<string>("");
@@ -73,12 +77,18 @@ const NewEvent = () => {
         setStep(step + 1);
       } catch (error) {
         console.error("Error fetching participants' names:", error);
-        alert(
-          "Error fetching participants' names. Please enter registered emails."
-        );
+
+        toast.toast({
+          title: "Participants not found",
+          description: "Please ensure you enter registered emails.",
+        });
       }
     } else {
-      alert("Please fill all fields before proceeding to the next step.");
+      toast.toast({
+        title: "Incomplete Form",
+        description:
+          "Please complete all required fields before moving to the next step.",
+      });
     }
   };
 
@@ -96,15 +106,27 @@ const NewEvent = () => {
       .catch((error) => {
         console.error("Error fetching user email:", error);
         if (error.response && error.response.status === 401) {
-          // window.location.href = "/login";
+          window.location.href = "/login";
         }
       });
   }, []);
 
   const submitEventDetails = async () => {
     if (
-      expenses.every((expense) => expense > 0) &&
-      paidAmounts.every((paidAmount) => paidAmount > 0)
+      expenses.reduce((a, b) => a + b, 0) !==
+      paidAmounts.reduce((a, b) => a + b, 0)
+    ) {
+      toast.toast({
+        title: "Mismatch Alert",
+        description:
+          "The total expenses and total paid amounts must be equal. Please review your entries.",
+      });
+
+      return;
+    }
+    if (
+      expenses.every((expense) => expense >= 0) &&
+      paidAmounts.every((paidAmount) => paidAmount >= 0)
     ) {
       try {
         console.log("Posting new event...");
@@ -121,14 +143,36 @@ const NewEvent = () => {
           { withCredentials: true }
         );
         console.log("Event created successfully:", response.data);
-        alert("Event created successfully!");
+        toast.toast({
+          title: "Event Created",
+          description: "Your event has been created successfully.",
+        });
+        clearData();
       } catch (error) {
         console.error("Error creating event:", error);
-        alert("Error creating event. Please try again.");
+        toast.toast({
+          title: "Failed to create event",
+          description: "Please try again.",
+        });
+        clearData();
       }
     } else {
-      alert("Please fill all fields before submitting the event.");
+      toast.toast({
+        title: "Invalid Entry",
+        description:
+          "Please ensure all expense and paid amount fields are filled with valid numbers.",
+      });
     }
+  };
+
+  const clearData = () => {
+    setEventName("");
+    setDate(undefined);
+    setParticipants([participants[0], ""]);
+    setExpenses([]);
+    setPaidAmounts([]);
+    setParticipantsNames([]);
+    setStep(1);
   };
 
   return (

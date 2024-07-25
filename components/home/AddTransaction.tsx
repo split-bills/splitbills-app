@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Plus, Film, ShoppingBag, Utensils, Bus } from "lucide-react";
+import { clear } from "console";
 
 interface AddTransactionProps {
   title: string;
@@ -63,6 +64,15 @@ const AddTransaction: React.FC<AddTransactionProps> = ({ title }) => {
     type: title,
   });
 
+  const clearTransactionState = () => {
+    setFormData({
+      friendEmail: "",
+      amount: "",
+      reason: "",
+      type: title,
+    });
+  };
+
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [id]: value }));
@@ -77,9 +87,12 @@ const AddTransaction: React.FC<AddTransactionProps> = ({ title }) => {
 
     try {
       await postTransaction(formData);
+      clearTransactionState();
       console.log("Transaction added successfully");
     } catch (error) {
       console.error("Error adding transaction:", error);
+      clearTransactionState();
+    } finally {
     }
   };
 

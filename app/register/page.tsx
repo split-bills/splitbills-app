@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import Link from "next/link";
@@ -18,6 +19,7 @@ import { Label } from "@/components/ui/label";
 
 export default function LoginForm() {
   const router = useRouter();
+  const toast = useToast();
 
   useEffect(() => {
     console.log("Checking if authenticated");
@@ -67,7 +69,10 @@ export default function LoginForm() {
     e.preventDefault();
     console.log(signUpDetails);
     if (signUpDetails.password !== signUpDetails.confirm_password) {
-      alert("Passwords do not match");
+      toast.toast({
+        title: "Passwords do not match",
+        description: "Please check your password and try again.",
+      });
       return;
     }
     try {
@@ -76,11 +81,13 @@ export default function LoginForm() {
         signUpDetails
       );
       console.log("Signed up successfully:", response.data);
-      alert("Sign up successful!");
       router.push("/login");
     } catch (error) {
       console.error(error);
-      alert("Error creating account");
+      toast.toast({
+        title: "Error creating account",
+        description: "Please try again.",
+      });
     }
   };
 

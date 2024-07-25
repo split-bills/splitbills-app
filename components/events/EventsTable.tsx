@@ -30,6 +30,7 @@ interface EventsTableProps {
 interface Event {
   name: string;
   date: Date;
+  attendees: number;
 }
 
 const EventsTable: React.FC<EventsTableProps> = ({
@@ -47,9 +48,6 @@ const EventsTable: React.FC<EventsTableProps> = ({
           withCredentials: true,
         });
         console.log("Events data: ", response.data);
-        response.data.events.sort((a: Event, b: Event) =>
-          a.date < b.date ? 1 : -1
-        );
         setEvents(response.data.events);
       } catch (error: any) {
         console.error("Error fetching events data: ", error);
@@ -91,7 +89,7 @@ const EventsTable: React.FC<EventsTableProps> = ({
             {events.map((event, index) => (
               <TableRow key={index}>
                 <TableCell>{event.name}</TableCell>
-                <TableCell className="text-center">7</TableCell>
+                <TableCell className="text-center">{event.attendees}</TableCell>
                 <TableCell className="text-center">
                   {format(event.date, "PPP")}
                 </TableCell>
